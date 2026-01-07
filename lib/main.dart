@@ -62,13 +62,12 @@ class _MyHomePageState extends State<MyHomePage> {
               color: Colors.yellow,
               child: Column(
                 children: [
-                  const Text('You have clicked the button this many times:',
-                      textAlign: TextAlign.left,
-                      textDirection: TextDirection.rtl,
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.deepPurpleAccent)),
+                  const Text(
+                    'You have clicked the button this many times:',
+                    textAlign: TextAlign.left,
+                    textDirection: TextDirection.rtl,
+                    style: AppTextStyles.buttonHintText,
+                  ),
                   const SizedBox(height: 20),
                   Text(
                     '$_counter',

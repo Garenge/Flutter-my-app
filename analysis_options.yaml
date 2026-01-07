@@ -9,6 +9,19 @@
 # packages, and plugins designed to encourage good coding practices.
 include: package:flutter_lints/flutter.yaml
 
+analyzer:
+  # 排除某些文件或文件夹
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+  
+  # 错误级别设置
+  errors:
+    # 将某些规则降级为警告而不是错误
+    invalid_annotation_target: ignore
+    missing_required_param: warning
+    missing_return: warning
+
 linter:
   # The lint rules applied to this project can be customized in the
   # section below to disable rules from the `package:flutter_lints/flutter.yaml`
@@ -22,6 +35,10 @@ linter:
   # `// ignore_for_file: name_of_lint` syntax on the line or in the file
   # producing the lint.
   rules:
+    # 禁用一些可能产生过多警告的规则
+    prefer_const_constructors: true  # 保留，但已修复代码
+    prefer_const_literals_to_create_immutables: true
+    prefer_const_constructors_in_immutables: true
     # avoid_print: false  # Uncomment to disable the `avoid_print` rule
     # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
 

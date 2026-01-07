@@ -43,5 +43,12 @@ class AppTextStyles {
     color: Colors.black54,
   );
 
+  /// 按钮点击提示文本样式
+  static const TextStyle buttonHintText = TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.bold,
+    color: Colors.deepPurpleAccent,
+  );
+
   // 可以继续添加更多文本样式...
 }
