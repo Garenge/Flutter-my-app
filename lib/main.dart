@@ -38,6 +38,34 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  // 显示对话框的方法
+  void _showHelloDialog() {
+    // 这里的 context 是 State 类的属性，不是全局变量
+    // _MyHomePageState 继承自 State<MyHomePage>
+    // State 类有一个 BuildContext context 属性
+    // 所以可以直接使用 this.context（通常省略 this）
+    showDialog(
+      context: context, // 使用 State 类的 context 属性
+      builder: (BuildContext context) {
+        // 这里的 context 是 builder 的参数（局部变量）
+        // 注意：builder 的 context 和上面的 context 是不同的变量
+        return AlertDialog(
+          title: Text('Hello, World!'),
+          content: Text('This is a dialog'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                // 这里使用的是 builder 的 context 参数
+                Navigator.of(context).pop(); // 关闭对话框
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,12 +106,18 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Expanded(
                 child: Container(
-              color: Colors.green,
-              // 距离上面一个container底部的距离为0, 距离父视图的底部距离为0
-              // margin: const EdgeInsets.only(bottom: 0),
-              // height: 200,
-              // margin: const EdgeInsets.only(bottom: 0),
-            ))
+                    color: Colors.green,
+                    child: Center(
+                      child: ElevatedButton(
+                        onPressed: _showHelloDialog,
+                        child: Text('Hello, World!'),
+                      ),
+                    )
+                    // 距离上面一个container底部的距离为0, 距离父视图的底部距离为0
+                    // margin: const EdgeInsets.only(bottom: 0),
+                    // height: 200,
+                    // margin: const EdgeInsets.only(bottom: 0),
+                    ))
           ],
         ),
       ),
