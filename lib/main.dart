@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'theme/app_theme.dart';
+import 'theme/cupertino_theme.dart';
 import 'styles/app_text_styles.dart';
+import 'services/app_style_manager.dart';
+import 'widgets/global_style_toggle_button.dart';
 
 void main() {
   runApp(const MyApp());
@@ -9,19 +13,59 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: AppTheme.theme,
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+    // 创建全局风格状态管理器
+    final styleNotifier = AppStyleNotifier();
+
+    return AppStyleManager(
+      notifier: styleNotifier,
+      child: ListenableBuilder(
+        listenable: styleNotifier,
+        builder: (context, _) {
+          // 根据风格返回不同的 App
+          if (styleNotifier.currentStyle == AppDesignStyle.cupertino) {
+            return CupertinoApp(
+              title: 'Flutter Demo',
+              theme: CupertinoAppTheme.theme,
+              builder: (context, child) {
+                // 在 CupertinoApp 上添加全局悬浮按钮
+                return Stack(
+                  children: [
+                    child ?? const SizedBox(),
+                    const GlobalStyleToggleButton(),
+                  ],
+                );
+              },
+              home: const MyHomePage(title: 'Flutter Demo Home Page'),
+            );
+          } else {
+            return MaterialApp(
+              title: 'Flutter Demo',
+              theme: AppTheme.theme,
+              builder: (context, child) {
+                // 在 MaterialApp 上添加全局悬浮按钮
+                return Stack(
+                  children: [
+                    child ?? const SizedBox(),
+                    const GlobalStyleToggleButton(),
+                  ],
+                );
+              },
+              home: const MyHomePage(title: 'Flutter Demo Home Page'),
+            );
+          }
+        },
+      ),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  const MyHomePage({
+    super.key,
+    required this.title,
+  });
 
   final String title;
 
@@ -38,94 +82,202 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  // 显示对话框的方法
+  // 显示对话框的方法（根据风格自动切换）
   void _showHelloDialog() {
-    // 这里的 context 是 State 类的属性，不是全局变量
-    // _MyHomePageState 继承自 State<MyHomePage>
-    // State 类有一个 BuildContext context 属性
-    // 所以可以直接使用 this.context（通常省略 this）
-    showDialog(
-      context: context, // 使用 State 类的 context 属性
-      builder: (BuildContext context) {
-        // 这里的 context 是 builder 的参数（局部变量）
-        // 注意：builder 的 context 和上面的 context 是不同的变量
-        return AlertDialog(
-          title: Text('Hello, World!'),
-          content: Text('This is a dialog'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                // 这里使用的是 builder 的 context 参数
-                Navigator.of(context).pop(); // 关闭对话框
-              },
-              child: Text('OK'),
-            ),
-          ],
-        );
-      },
-    );
+    final currentStyle = AppStyleManager.of(context).currentStyle;
+    if (currentStyle == AppDesignStyle.cupertino) {
+      // Cupertino 风格的对话框
+      showCupertinoDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return CupertinoAlertDialog(
+            title: const Text('Hello, World!'),
+            content: const Text('This is a dialog'),
+            actions: [
+              CupertinoDialogAction(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      // Material 风格的对话框
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Hello, World!'),
+            content: const Text('This is a dialog'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    // 从全局状态获取当前风格
+    final currentStyle = AppStyleManager.of(context).currentStyle;
+
+    // 根据风格返回不同的页面结构
+    if (currentStyle == AppDesignStyle.cupertino) {
+      return _buildCupertinoPage();
+    } else {
+      return _buildMaterialPage();
+    }
+  }
+
+  // 构建 Material Design 风格的页面
+  Widget _buildMaterialPage() {
     return Scaffold(
       appBar: AppBar(
-        // 只覆盖 fontSize，保留主题中的其他样式（颜色、字体粗细等）
-        titleTextStyle: AppTheme.theme.appBarTheme.titleTextStyle?.copyWith(
-          fontSize: 25,
+        toolbarHeight: 56,
+        backgroundColor: Colors.yellow,
+        title: Text(
+          widget.title,
+          style: const TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.w600,
+            color: Colors.black,
+          ),
         ),
-        title: Text(widget.title),
       ),
-      body: Center(
-        child: Column(
-          // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          // mainAxisSize: MainAxisSize.max,
-          // crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Container(
-              color: Colors.red,
-              height: 100,
-            ),
-            Container(
-              color: Colors.yellow,
-              child: Column(
-                children: [
-                  const Text(
-                    'You have clicked the button this many times:',
-                    textAlign: TextAlign.left,
-                    textDirection: TextDirection.rtl,
-                    style: AppTextStyles.buttonHintText,
-                  ),
-                  const SizedBox(height: 20),
-                  Text(
-                    '$_counter',
-                    style: AppTextStyles.countText,
-                  ),
-                ],
+      body: SafeArea(
+        child: Center(
+          child: Column(
+            children: <Widget>[
+              Container(
+                color: Colors.red,
+                height: 100,
               ),
-            ),
-            Expanded(
+              Container(
+                color: Colors.yellow,
+                child: Column(
+                  children: [
+                    const Text(
+                      'You have clicked the button this many times:',
+                      textAlign: TextAlign.left,
+                      textDirection: TextDirection.rtl,
+                      style: AppTextStyles.buttonHintText,
+                    ),
+                    const SizedBox(height: 20),
+                    Text(
+                      '$_counter',
+                      style: AppTextStyles.countText,
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
                 child: Container(
-                    color: Colors.green,
-                    child: Center(
-                      child: ElevatedButton(
-                        onPressed: _showHelloDialog,
-                        child: Text('Hello, World!'),
-                      ),
-                    )
-                    // 距离上面一个container底部的距离为0, 距离父视图的底部距离为0
-                    // margin: const EdgeInsets.only(bottom: 0),
-                    // height: 200,
-                    // margin: const EdgeInsets.only(bottom: 0),
-                    ))
-          ],
+                  color: Colors.green,
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ElevatedButton(
+                          onPressed: _showHelloDialog,
+                          child: const Text('Hello, World!'),
+                        ),
+                        const SizedBox(height: 20),
+                        FloatingActionButton(
+                          onPressed: _incrementCounter,
+                          child: const Icon(Icons.add),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+
+  // 构建 Cupertino 风格的页面
+  Widget _buildCupertinoPage() {
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        backgroundColor: Colors.yellow,
+        border: null,
+        automaticallyImplyLeading: false,
+        middle: Text(
+          widget.title,
+          style: const TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.w600,
+            color: Colors.black,
+          ),
+        ),
+      ),
+      child: SafeArea(
+        child: Center(
+          child: Column(
+            children: <Widget>[
+              Container(
+                color: CupertinoColors.systemRed,
+                height: 100,
+              ),
+              Container(
+                color: CupertinoColors.systemYellow,
+                child: Column(
+                  children: [
+                    const Text(
+                      'You have clicked the button this many times:',
+                      textAlign: TextAlign.left,
+                      textDirection: TextDirection.rtl,
+                      style: AppTextStyles.buttonHintText,
+                    ),
+                    const SizedBox(height: 20),
+                    Text(
+                      '$_counter',
+                      style: AppTextStyles.countText,
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  color: CupertinoColors.systemGreen,
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CupertinoButton.filled(
+                          onPressed: _showHelloDialog,
+                          child: const Text('Hello, World!'),
+                        ),
+                        const SizedBox(height: 20),
+                        CupertinoButton(
+                          onPressed: _incrementCounter,
+                          child: const Icon(
+                            CupertinoIcons.add_circled_solid,
+                            size: 40,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

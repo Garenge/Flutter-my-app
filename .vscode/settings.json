@@ -1,0 +1,4 @@
+{
+  // 保存时自动触发 Flutter Hot Reload（对所有已连接设备）
+  "dart.flutterHotReloadOnSave": "all"
+}
