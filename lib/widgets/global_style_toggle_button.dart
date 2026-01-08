@@ -36,7 +36,7 @@ class _GlobalStyleToggleButtonState extends State<GlobalStyleToggleButton> {
               // 检测双击
               if (_lastTapTime != null &&
                   now.difference(_lastTapTime!) < _doubleTapDelay) {
-                // 双击：切换风格
+                // 双击：切换风格（异步调用，不等待完成）
                 styleNotifier.toggleStyle();
                 _lastTapTime = null; // 重置，避免三击误触发
               } else {
