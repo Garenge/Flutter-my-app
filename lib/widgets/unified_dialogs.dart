@@ -9,6 +9,7 @@ class UnifiedDialogs {
   /// [context] 上下文
   /// [title] 标题
   /// [content] 内容
+  /// [barrierDismissible] 是否允许点击外部关闭对话框（默认 false）
   /// [style] 可选：强制指定风格
   /// [materialConfig] Material 特定配置
   /// [cupertinoConfig] Cupertino 特定配置
@@ -16,6 +17,7 @@ class UnifiedDialogs {
     required BuildContext context,
     required String title,
     required String content,
+    bool barrierDismissible = false,
     AppDesignStyle? style,
     Map<String, dynamic>? materialConfig,
     Map<String, dynamic>? cupertinoConfig,
@@ -28,6 +30,7 @@ class UnifiedDialogs {
     if (currentStyle == AppDesignStyle.cupertino) {
       return showCupertinoDialog<bool>(
         context: context,
+        barrierDismissible: barrierDismissible,
         builder: (BuildContext context) {
           return CupertinoAlertDialog(
             title: Text(title),
@@ -48,6 +51,7 @@ class UnifiedDialogs {
     } else {
       return showDialog<bool>(
         context: context,
+        barrierDismissible: barrierDismissible,
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text(title),
@@ -72,11 +76,13 @@ class UnifiedDialogs {
   /// [context] 上下文
   /// [title] 标题
   /// [content] 内容
+  /// [barrierDismissible] 是否允许点击外部关闭对话框（默认 false）
   /// [style] 可选：强制指定风格
   static Future<void> showSimpleDialog({
     required BuildContext context,
     required String title,
     required String content,
+    bool barrierDismissible = false,
     AppDesignStyle? style,
   }) async {
     // 如果没有指定风格，从上下文获取
@@ -87,6 +93,7 @@ class UnifiedDialogs {
     if (currentStyle == AppDesignStyle.cupertino) {
       showCupertinoDialog(
         context: context,
+        barrierDismissible: barrierDismissible,
         builder: (BuildContext context) {
           return CupertinoAlertDialog(
             title: Text(title),
@@ -105,6 +112,7 @@ class UnifiedDialogs {
     } else {
       showDialog(
         context: context,
+        barrierDismissible: barrierDismissible,
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text(title),

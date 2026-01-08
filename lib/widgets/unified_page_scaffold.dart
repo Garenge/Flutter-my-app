@@ -47,7 +47,7 @@ class UnifiedPageScaffold extends StatelessWidget {
         navigationBar: navigationBar,
         child: Container(
           color: backgroundColor,
-          child: body,
+        child: body,
         ),
       );
     } else {
