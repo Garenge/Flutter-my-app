@@ -26,7 +26,9 @@ class _GlobalStyleToggleButtonState extends State<GlobalStyleToggleButton> {
         final isMaterial =
             styleNotifier.currentStyle == AppDesignStyle.material;
 
+        // 使用 key 确保风格切换时完全重建，避免动画插值问题
         return Positioned(
+          key: ValueKey('toggle_button_$isMaterial'),
           right: 16,
           bottom: 80, // 留出空间，避免与其他 FAB 重叠
           child: GestureDetector(

@@ -47,7 +47,7 @@ class UnifiedPageScaffold extends StatelessWidget {
         navigationBar: navigationBar,
         child: Container(
           color: backgroundColor,
-        child: body,
+          child: body,
         ),
       );
     } else {
@@ -101,13 +101,36 @@ class UnifiedAppBar extends StatelessWidget implements PreferredSizeWidget {
             AppDesignStyle.material);
 
     if (currentStyle == AppDesignStyle.cupertino) {
+      // 确保 title 的 TextStyle 有明确的 inherit 值，避免切换时的插值问题
+      Widget? effectiveTitle = title;
+      if (title is Text) {
+        final titleText = title as Text;
+        if (titleText.style != null) {
+          // 如果已有 style，确保 inherit: false
+          effectiveTitle = Text(
+            titleText.data ?? '',
+            style: titleText.style!.copyWith(inherit: false),
+            textAlign: titleText.textAlign,
+            textDirection: titleText.textDirection,
+            locale: titleText.locale,
+            softWrap: titleText.softWrap,
+            overflow: titleText.overflow,
+            textScaleFactor: titleText.textScaleFactor,
+            maxLines: titleText.maxLines,
+            semanticsLabel: titleText.semanticsLabel,
+            textWidthBasis: titleText.textWidthBasis,
+            textHeightBehavior: titleText.textHeightBehavior,
+          );
+        }
+      }
+
       return CupertinoNavigationBar(
         backgroundColor:
             backgroundColor ?? cupertinoConfig?['backgroundColor'] as Color?,
         border: cupertinoConfig?['border'] as Border? ??
             (cupertinoConfig?['hideBorder'] == true ? null : const Border()),
         automaticallyImplyLeading: automaticallyImplyLeading,
-        middle: title,
+        middle: effectiveTitle,
         leading: leading,
         trailing: actions != null && actions!.isNotEmpty
             ? Row(
@@ -117,6 +140,13 @@ class UnifiedAppBar extends StatelessWidget implements PreferredSizeWidget {
             : null,
       );
     } else {
+      // 检查 title 是否已有 TextStyle，如果有则禁用 AppBar 的默认 titleTextStyle
+      // 以避免 "Failed to interpolate TextStyles with different inherit values" 错误
+      final hasCustomStyle = title is Text && (title as Text).style != null;
+      final titleTextStyle = hasCustomStyle
+          ? const TextStyle() // 使用空的 TextStyle 禁用主题样式合并
+          : (materialConfig?['titleTextStyle'] as TextStyle?);
+
       return AppBar(
         title: title,
         actions: actions,
@@ -125,6 +155,7 @@ class UnifiedAppBar extends StatelessWidget implements PreferredSizeWidget {
             backgroundColor ?? materialConfig?['backgroundColor'] as Color?,
         automaticallyImplyLeading: automaticallyImplyLeading,
         toolbarHeight: materialConfig?['toolbarHeight'] as double? ?? 56.0,
+        titleTextStyle: titleTextStyle, // 明确设置避免合并冲突
         // 支持其他 AppBar 的配置
         elevation: materialConfig?['elevation'] as double?,
       );

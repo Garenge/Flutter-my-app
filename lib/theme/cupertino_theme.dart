@@ -17,16 +17,18 @@ class CupertinoAppTheme {
 
       // 文本主题
       textTheme: CupertinoTextThemeData(
-        // 导航栏文本样式
-        navTitleTextStyle: TextStyle(
+        // 导航栏文本样式 - 明确设置 inherit: false 避免风格切换时的插值问题
+        navTitleTextStyle: const TextStyle(
           fontSize: 17,
           fontWeight: FontWeight.w600,
           color: CupertinoColors.label,
+          inherit: false, // 关键：设置为 false 避免与 Material 样式插值冲突
         ),
         // 大标题样式
-        textStyle: TextStyle(
+        textStyle: const TextStyle(
           fontSize: 17,
           color: CupertinoColors.label,
+          inherit: false, // 关键：设置为 false 避免与 Material 样式插值冲突
         ),
       ),
 

@@ -32,13 +32,17 @@ class UnifiedApp extends StatelessWidget {
             AppDesignStyle.material);
 
     if (currentStyle == AppDesignStyle.cupertino) {
+      // 使用 key 确保风格切换时完全重建，避免动画过渡导致的 TextStyle 插值问题
       return CupertinoApp(
+        key: const ValueKey('cupertino_app'),
         title: title,
         theme: cupertinoConfig?['theme'] as CupertinoThemeData? ??
             CupertinoAppTheme.theme,
         builder: (context, child) {
           // 在 CupertinoApp 上添加全局悬浮按钮
+          // 使用 key 确保风格切换时完全重建，避免动画插值问题
           return Stack(
+            key: ValueKey('stack_cupertino'),
             children: [
               child ?? const SizedBox(),
               const GlobalStyleToggleButton(),
@@ -51,12 +55,16 @@ class UnifiedApp extends StatelessWidget {
             const {},
       );
     } else {
+      // 使用 key 确保风格切换时完全重建，避免动画过渡导致的 TextStyle 插值问题
       return MaterialApp(
+        key: const ValueKey('material_app'),
         title: title,
         theme: materialConfig?['theme'] as ThemeData? ?? AppTheme.theme,
         builder: (context, child) {
           // 在 MaterialApp 上添加全局悬浮按钮
+          // 使用 key 确保风格切换时完全重建，避免动画插值问题
           return Stack(
+            key: ValueKey('stack_material'),
             children: [
               child ?? const SizedBox(),
               const GlobalStyleToggleButton(),
