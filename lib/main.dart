@@ -45,11 +45,10 @@ class MyApp extends StatelessWidget {
           // 使用统一 App 组件，自动根据风格选择
           // 使用 key 强制完全重建，避免风格切换时的 TextStyle 插值问题
           return UnifiedApp(
-            key: ValueKey(
-                'app_${styleNotifier.currentStyle}'), // 使用风格作为 key 强制完全重建
-            title: 'Flutter Demo',
-            home: const HomePage(),
-          );
+              key: ValueKey(
+                  'app_${styleNotifier.currentStyle}'), // 使用风格作为 key 强制完全重建
+              title: 'Flutter Demo',
+              home: const HomePage());
         },
       ),
     );

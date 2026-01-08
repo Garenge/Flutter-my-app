@@ -2,20 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import '../services/app_style_manager.dart';
 import '../widgets/unified_page_scaffold.dart';
+import '../widgets/unified_dialogs.dart';
 import 'counter_page.dart';
+import 'my_test_page.dart';
 
 /// 工具模型
 class ToolItem {
   final String title;
   final String description;
   final IconData icon;
-  final Widget page;
+  final VoidCallback onTap; // 点击回调，所有逻辑都在这里处理
 
   const ToolItem({
     required this.title,
     required this.description,
     required this.icon,
-    required this.page,
+    required this.onTap,
   });
 }
 
@@ -24,21 +26,31 @@ class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   /// 获取所有工具列表
-  List<ToolItem> _getTools() {
+  List<ToolItem> _getTools(BuildContext context) {
     return [
-      const ToolItem(
+      ToolItem(
         title: '计数器',
         description: '一个简单的计数器工具，演示基础的交互功能',
         icon: Icons.add_circle_outline,
-        page: CounterPage(),
+        onTap: () {
+          _navigateToPage(context, const CounterPage());
+        },
+      ),
+      ToolItem(
+        title: '切换UI风格',
+        description: '在 Material Design 和 Cupertino 风格之间切换',
+        icon: Icons.style,
+        onTap: () => _handleStyleSwitch(context),
+      ),
+      ToolItem(
+        title: '自测试页面',
+        description: '这个页面, 手写代码',
+        icon: Icons.code,
+        onTap: () {
+          _navigateToPage(context, const MyTestPage());
+        },
       ),
       // 后续可以继续添加更多工具
-      // ToolItem(
-      //   title: '待办事项',
-      //   description: '管理您的待办事项列表',
-      //   icon: Icons.checklist,
-      //   page: TodoPage(),
-      // ),
     ];
   }
 
@@ -68,7 +80,7 @@ class HomePage extends StatelessWidget {
           inherit: false, // 明确设置 inherit 避免样式合并冲突
         ),
       ),
-      backgroundColor: Colors.blue,
+      backgroundColor: Colors.red,
       automaticallyImplyLeading: false,
       // Cupertino 特定配置
       cupertinoConfig: {
@@ -83,7 +95,7 @@ class HomePage extends StatelessWidget {
 
   /// 构建页面主体
   Widget _buildBody(BuildContext context) {
-    final tools = _getTools();
+    final tools = _getTools(context);
 
     return ListView.builder(
       padding: const EdgeInsets.all(16),
@@ -122,17 +134,13 @@ class HomePage extends StatelessWidget {
             ),
           ),
           trailing: const Icon(Icons.chevron_right),
-          onTap: () {
-            _navigateToTool(context, tool);
-          },
+          onTap: tool.onTap,
         ),
       );
     } else {
       // Cupertino 风格
       return GestureDetector(
-        onTap: () {
-          _navigateToTool(context, tool);
-        },
+        onTap: tool.onTap,
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           margin: const EdgeInsets.only(bottom: 8),
@@ -188,23 +196,48 @@ class HomePage extends StatelessWidget {
     }
   }
 
-  /// 导航到工具页面
-  void _navigateToTool(BuildContext context, ToolItem tool) {
+  /// 统一的页面跳转方法
+  /// 根据当前风格自动选择合适的路由方式
+  void _navigateToPage(BuildContext context, Widget page) {
     final currentStyle = AppStyleManager.maybeOf(context)?.currentStyle ??
         AppDesignStyle.material;
 
     if (currentStyle == AppDesignStyle.cupertino) {
       Navigator.of(context).push(
         CupertinoPageRoute(
-          builder: (context) => tool.page,
+          builder: (context) => page,
         ),
       );
     } else {
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => tool.page,
+          builder: (context) => page,
         ),
       );
+    }
+  }
+
+  /// 处理风格切换
+  void _handleStyleSwitch(BuildContext context) async {
+    final styleNotifier = AppStyleManager.of(context);
+    final currentStyle = styleNotifier.currentStyle;
+    final targetStyle = currentStyle == AppDesignStyle.material
+        ? AppDesignStyle.cupertino
+        : AppDesignStyle.material;
+
+    final styleName = targetStyle == AppDesignStyle.material
+        ? 'Material Design（谷歌风格）'
+        : 'Cupertino（苹果风格）';
+
+    final result = await UnifiedDialogs.showConfirmDialog(
+      context: context,
+      title: '切换UI风格',
+      content: '确定要切换到 $styleName 吗？\n\n切换后界面风格将立即改变。',
+    );
+
+    if (result == true) {
+      // 用户确认，切换风格
+      await styleNotifier.toggleStyle();
     }
   }
 }

@@ -31,7 +31,6 @@ class CupertinoAppTheme {
           inherit: false, // 关键：设置为 false 避免与 Material 样式插值冲突
         ),
       ),
-
       // 背景色
       scaffoldBackgroundColor: CupertinoColors.systemBackground,
     );

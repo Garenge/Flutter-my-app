@@ -86,7 +86,7 @@ class UnifiedAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.title,
     this.actions,
     this.leading,
-    this.backgroundColor,
+    this.backgroundColor = const Color(0xFFAABBCC),
     this.automaticallyImplyLeading = true,
     this.style,
     this.materialConfig,
@@ -124,9 +124,21 @@ class UnifiedAppBar extends StatelessWidget implements PreferredSizeWidget {
         }
       }
 
+      // iOS 导航栏背景色优先级：cupertinoConfig > backgroundColor
+      // 这样可以允许通过 cupertinoConfig 覆盖默认的 backgroundColor
+      final navBarColor =
+          cupertinoConfig?['backgroundColor'] as Color? ?? backgroundColor;
+
+      print(
+          'cupertinoConfig.backgroundColor, ${cupertinoConfig?['backgroundColor']}');
+      print('backgroundColor, $backgroundColor');
+
       return CupertinoNavigationBar(
-        backgroundColor:
-            backgroundColor ?? cupertinoConfig?['backgroundColor'] as Color?,
+        backgroundColor: navBarColor,
+        // 导航阴影
+        enableBackgroundFilterBlur: false,
+        // 禁用导航栏背景色自动隐藏
+        automaticBackgroundVisibility: false,
         border: cupertinoConfig?['border'] as Border? ??
             (cupertinoConfig?['hideBorder'] == true ? null : const Border()),
         automaticallyImplyLeading: automaticallyImplyLeading,
