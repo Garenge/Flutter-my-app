@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:my_app/base/my_base_page.dart';
 import '../services/app_style_manager.dart';
-import '../widgets/unified_page_scaffold.dart';
 import '../widgets/unified_dialogs.dart';
 import 'counter_page.dart';
-import 'my_test_page.dart';
+import 'my_layout_page.dart';
+import 'my_navi_page.dart';
 
 /// 工具模型
 class ToolItem {
@@ -22,8 +23,24 @@ class ToolItem {
 }
 
 /// 首页 - 工具列表
-class HomePage extends StatelessWidget {
+class HomePage extends MyBasePage {
   const HomePage({super.key});
+
+  /// 页面标题
+  @override
+  String get pageTitle => 'Flutter Demo 工具集';
+
+  /// 覆盖 AppBar 背景色（保持原来的红色）
+  @override
+  Color get appBarBackgroundColor => Colors.red;
+
+  /// 覆盖页面背景色（保持原来的灰色）
+  @override
+  Color? get pageBackgroundColor => Colors.grey[100];
+
+  /// 首页不需要返回按钮
+  @override
+  bool get automaticallyImplyLeading => false;
 
   /// 获取所有工具列表
   List<ToolItem> _getTools(BuildContext context) {
@@ -43,58 +60,28 @@ class HomePage extends StatelessWidget {
         onTap: () => _handleStyleSwitch(context),
       ),
       ToolItem(
-        title: '自测试页面',
+        title: '布局页面',
         description: '这个页面, 手写代码',
         icon: Icons.code,
         onTap: () {
-          _navigateToPage(context, const MyTestPage());
+          _navigateToPage(context, const MyLayoutPage());
+        },
+      ),
+      ToolItem(
+        title: '导航',
+        description: '导航UI',
+        icon: Icons.code,
+        onTap: () {
+          _navigateToPage(context, const MyNaviPage());
         },
       ),
       // 后续可以继续添加更多工具
     ];
   }
 
+  /// 构建页面主体（基类要求实现的方法）
   @override
-  Widget build(BuildContext context) {
-    final currentStyle = AppStyleManager.maybeOf(context)?.currentStyle ??
-        AppDesignStyle.material;
-
-    return UnifiedPageScaffold(
-      backgroundColor: Colors.grey[100],
-      appBar: _buildAppBar(currentStyle),
-      body: SafeArea(
-        child: _buildBody(context),
-      ),
-    );
-  }
-
-  /// 构建 AppBar
-  Widget _buildAppBar(AppDesignStyle currentStyle) {
-    return const UnifiedAppBar(
-      title: Text(
-        'Flutter Demo 工具集',
-        style: TextStyle(
-          fontSize: 22,
-          fontWeight: FontWeight.w600,
-          color: Colors.black,
-          inherit: false, // 明确设置 inherit 避免样式合并冲突
-        ),
-      ),
-      backgroundColor: Colors.red,
-      automaticallyImplyLeading: false,
-      // Cupertino 特定配置
-      cupertinoConfig: {
-        'hideBorder': true,
-      },
-      // Material 特定配置
-      materialConfig: {
-        'toolbarHeight': 56.0,
-      },
-    );
-  }
-
-  /// 构建页面主体
-  Widget _buildBody(BuildContext context) {
+  Widget buildBody(BuildContext context) {
     final tools = _getTools(context);
 
     return ListView.builder(
@@ -117,6 +104,9 @@ class HomePage extends StatelessWidget {
       return Card(
         margin: const EdgeInsets.only(bottom: 12),
         elevation: 2,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12), // 圆角半径，可以调整
+        ),
         child: ListTile(
           leading: Icon(tool.icon, size: 32, color: Colors.blue),
           title: Text(
@@ -146,11 +136,10 @@ class HomePage extends StatelessWidget {
           margin: const EdgeInsets.only(bottom: 8),
           decoration: BoxDecoration(
             color: CupertinoColors.systemBackground,
-            border: Border(
-              bottom: BorderSide(
-                color: CupertinoColors.separator,
-                width: 0.5,
-              ),
+            borderRadius: BorderRadius.circular(12), // 圆角半径，与 Material 风格保持一致
+            border: Border.all(
+              color: CupertinoColors.separator,
+              width: 0.5,
             ),
           ),
           child: Row(

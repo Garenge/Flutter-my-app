@@ -129,10 +129,6 @@ class UnifiedAppBar extends StatelessWidget implements PreferredSizeWidget {
       final navBarColor =
           cupertinoConfig?['backgroundColor'] as Color? ?? backgroundColor;
 
-      print(
-          'cupertinoConfig.backgroundColor, ${cupertinoConfig?['backgroundColor']}');
-      print('backgroundColor, $backgroundColor');
-
       return CupertinoNavigationBar(
         backgroundColor: navBarColor,
         // 导航阴影
