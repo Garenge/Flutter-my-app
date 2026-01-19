@@ -165,7 +165,7 @@ class HomePage extends MyBasePage {
                     const SizedBox(height: 4),
                     Text(
                       tool.description,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 13,
                         color: CupertinoColors.secondaryLabel,
                       ),
