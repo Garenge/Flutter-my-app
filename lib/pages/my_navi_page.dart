@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/base/my_base_page.dart';
+import 'package:my_app/styles/app_colors.dart';
 
-const logoImage = 'assets/images/common/app_icon.png';
+const logoImage = 'assets/images/login/login_img_logo.png';
+const iconChange = 'assets/images/login/login_ic_change-dark.png';
 
 /// 示例页面：演示如何继承 MyBasePage
 class MyNaviPage extends MyBasePage {
@@ -17,31 +19,62 @@ class MyNaviPage extends MyBasePage {
 
   /// 覆盖导航栏背景色
   @override
-  Color get appBarBackgroundColor => const Color(0xFFAABBFF);
+  Color get appBarBackgroundColor => const Color(0xFFFFFFFF);
 
   /// 构建当前页面的主体内容
   @override
   Widget buildBody(BuildContext context) {
     return Container(
-      color: Colors.blue,
-      padding: const EdgeInsets.all(16),
+      color: const Color(0xFFFFFFFF),
+      padding: const EdgeInsets.only(left: 16, right: 16),
       child: Column(
-        // crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           // ClipRRect 包裹整个 Container，只需写一次圆角值
-          ClipRRect(
-            borderRadius: BorderRadius.circular(50), // 只写一次 ✨
-            child: Container(
-              width: 100,
-              height: 100,
-              decoration: const BoxDecoration(
-                color: Colors.white, // 不需要 borderRadius，ClipRRect 会裁剪
-              ),
-              child: Image.asset(
-                logoImage,
-                fit: BoxFit.cover,
+          Center(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8), // 只写一次 ✨
+              child: Container(
+                width: 179,
+                height: 32,
+                child: Image.asset(
+                  logoImage,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
+          ),
+          const SizedBox(
+            height: 16,
+          ),
+          Container(
+            height: 40,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Text(
+                  '中国站',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 8),
+                SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: Image.asset(iconChange),
+                )
+              ],
+            ),
+          ),
+          Column(
+            children: [
+              _buildTextInput(context, text: '这是第一行', palceholder: '请输入'),
+              const SizedBox(height: 8),
+              _buildTextInput(context, text: '这是第二行', palceholder: '请输入'),
+            ],
+          ),
+          const SizedBox(
+            height: 10,
           ),
           Container(
               color: Colors.green,
@@ -61,12 +94,45 @@ class MyNaviPage extends MyBasePage {
             ),
           ),
           const SizedBox(height: 12),
-          const Text(
-            '导航下面整个都是body',
-            style: TextStyle(color: Colors.white),
-          ),
+          Expanded(
+              child: Container(
+                  width: double.infinity,
+                  alignment: Alignment.center,
+                  color: Colors.yellow,
+                  child: const Text(
+                    '导航下面整个都是body',
+                    style: TextStyle(color: Colors.white),
+                  )))
         ],
       ),
     );
+  }
+
+  Widget _buildTextInput(BuildContext context,
+      {String? text, String? palceholder}) {
+    OutlineInputBorder getBorder(bool isHighlight) {
+      final color = isHighlight ? Colors.grey : AppColors.border;
+      final border = OutlineInputBorder(
+          borderRadius: BorderRadius.circular(22),
+          borderSide: BorderSide(
+            color: color,
+            width: 2,
+          ));
+      return border;
+    }
+
+    return Container(
+        height: 44,
+        child: TextField(
+          enabled: true,
+          controller: TextEditingController(text: text),
+          decoration: InputDecoration(
+            hintText: palceholder,
+            enabledBorder: getBorder(false),
+            disabledBorder: getBorder(false),
+            focusedBorder: getBorder(true),
+            border: getBorder(false),
+          ),
+        ));
   }
 }

@@ -24,5 +24,10 @@ class AppColors {
   static const Color error = Colors.red;
   static const Color info = Colors.blue;
 
+  // 线条
+  // 16进制
+  static const Color line = Color(0xFFF6F6F6);
+  static const Color border = Color(0xFFF6F6F6);
+
   // 可以继续添加更多颜色...
 }

@@ -42,7 +42,7 @@ class UnifiedApp extends StatelessWidget {
           // 在 CupertinoApp 上添加全局悬浮按钮
           // 使用 key 确保风格切换时完全重建，避免动画插值问题
           return Stack(
-            key: ValueKey('stack_cupertino'),
+            key: const ValueKey('stack_cupertino'),
             children: [
               child ?? const SizedBox(),
               const GlobalStyleToggleButton(),
@@ -64,7 +64,7 @@ class UnifiedApp extends StatelessWidget {
           // 在 MaterialApp 上添加全局悬浮按钮
           // 使用 key 确保风格切换时完全重建，避免动画插值问题
           return Stack(
-            key: ValueKey('stack_material'),
+            key: const ValueKey('stack_material'),
             children: [
               child ?? const SizedBox(),
               const GlobalStyleToggleButton(),
