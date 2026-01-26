@@ -17,6 +17,7 @@ class AppColors {
   // 文本颜色
   static const Color textPrimary = Colors.black87;
   static const Color textSecondary = Colors.black54;
+  static const Color textPlaceholder = Color(0xFFC7C7CC);
 
   // 功能色
   static const Color success = Colors.green;
