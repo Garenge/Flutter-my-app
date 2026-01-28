@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:my_app/base/my_base_page.dart';
+import 'package:my_app/pages/my_gridView_page.dart';
 import '../services/app_style_manager.dart';
 import '../widgets/unified_dialogs.dart';
 import 'counter_page.dart';
@@ -73,6 +74,14 @@ class HomePage extends MyBasePage {
         icon: Icons.code,
         onTap: () {
           _navigateToPage(context, const MyNaviPage());
+        },
+      ),
+      ToolItem(
+        title: 'GridView',
+        description: 'GridViewUI',
+        icon: Icons.code,
+        onTap: () {
+          _navigateToPage(context, const MyGridViewPage());
         },
       ),
       // 后续可以继续添加更多工具
