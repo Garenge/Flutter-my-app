@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:my_app/base/my_base_page.dart';
-import 'package:my_app/pages/my_gridView_page.dart';
+import 'package:my_app/pages/GridView/my_gridView_page.dart';
+import 'package:my_app/pages/Tab/my_tab_page.dart';
+import 'package:my_app/pages/Tab/my_tabbar_page.dart';
+import 'package:my_app/pages/Form/my_textField_page.dart';
 import '../services/app_style_manager.dart';
 import '../widgets/unified_dialogs.dart';
-import 'counter_page.dart';
-import 'my_layout_page.dart';
-import 'my_navi_page.dart';
+import 'Counter/my_counter_page.dart';
+import 'Layout/my_layout_page.dart';
+import 'Layout/my_navi_page.dart';
 
 /// 工具模型
 class ToolItem {
@@ -51,7 +54,7 @@ class HomePage extends MyBasePage {
         description: '一个简单的计数器工具，演示基础的交互功能',
         icon: Icons.add_circle_outline,
         onTap: () {
-          _navigateToPage(context, const CounterPage());
+          _navigateToPage(context, const MyCounterPage());
         },
       ),
       ToolItem(
@@ -82,6 +85,30 @@ class HomePage extends MyBasePage {
         icon: Icons.code,
         onTap: () {
           _navigateToPage(context, const MyGridViewPage());
+        },
+      ),
+      ToolItem(
+        title: 'Tabbar',
+        description: 'TabbarUI',
+        icon: Icons.code,
+        onTap: () {
+          _navigateToPage(context, const MyTabbarPage());
+        },
+      ),
+      ToolItem(
+        title: 'Tab',
+        description: 'TabUI',
+        icon: Icons.code,
+        onTap: () {
+          _navigateToPage(context, const MyTabPage());
+        },
+      ),
+      ToolItem(
+        title: 'TextField',
+        description: 'TextFieldUI',
+        icon: Icons.code,
+        onTap: () {
+          _navigateToPage(context, const MyTextFieldPage());
         },
       ),
       // 后续可以继续添加更多工具

@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import '../styles/app_text_styles.dart';
-import '../services/app_style_manager.dart';
-import '../widgets/unified_page_scaffold.dart';
-import '../widgets/unified_buttons.dart';
-import '../widgets/unified_dialogs.dart';
+import 'package:my_app/widgets/unified_dialogs.dart';
+import 'package:my_app/styles/app_text_styles.dart';
+import 'package:my_app/services/app_style_manager.dart';
+import 'package:my_app/widgets/unified_page_scaffold.dart';
+import 'package:my_app/widgets/unified_buttons.dart';
 
 /// 计数器页面
 /// 演示基础的计数器功能
-class CounterPage extends StatefulWidget {
-  const CounterPage({super.key});
+class MyCounterPage extends StatefulWidget {
+  const MyCounterPage({super.key});
 
   @override
-  State<CounterPage> createState() => _CounterPageState();
+  State<MyCounterPage> createState() => _MyCounterPageState();
 }
 
-class _CounterPageState extends State<CounterPage> {
+class _MyCounterPageState extends State<MyCounterPage> {
   int _counter = 0;
 
   void _incrementCounter() {
