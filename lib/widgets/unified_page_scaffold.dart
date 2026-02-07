@@ -164,6 +164,7 @@ class UnifiedAppBar extends StatelessWidget implements PreferredSizeWidget {
         automaticallyImplyLeading: automaticallyImplyLeading,
         toolbarHeight: materialConfig?['toolbarHeight'] as double? ?? 56.0,
         titleTextStyle: titleTextStyle, // 明确设置避免合并冲突
+        bottom: materialConfig?['bottom'] as PreferredSizeWidget?,
         // 支持其他 AppBar 的配置
         elevation: materialConfig?['elevation'] as double?,
       );
@@ -171,5 +172,10 @@ class UnifiedAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize {
+    final toolbarHeight = materialConfig?['toolbarHeight'] as double? ?? 56.0;
+    final bottom = materialConfig?['bottom'] as PreferredSizeWidget?;
+    final bottomHeight = bottom?.preferredSize.height ?? 0;
+    return Size.fromHeight(toolbarHeight + bottomHeight);
+  }
 }
