@@ -1,8 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import '../services/app_style_manager.dart';
 import '../theme/app_theme.dart';
 import '../theme/cupertino_theme.dart';
+import 'debug_corner_indicator.dart';
 import 'global_style_toggle_button.dart';
 
 /// 统一的 App 组件
@@ -36,15 +38,18 @@ class UnifiedApp extends StatelessWidget {
       return CupertinoApp(
         key: const ValueKey('cupertino_app'),
         title: title,
+        debugShowCheckedModeBanner: false,
         theme: cupertinoConfig?['theme'] as CupertinoThemeData? ??
             CupertinoAppTheme.theme,
         builder: (context, child) {
-          // 在 CupertinoApp 上添加全局悬浮按钮
-          // 使用 key 确保风格切换时完全重建，避免动画插值问题
+          Widget content = child ?? const SizedBox();
+          if (kDebugMode) {
+            content = DebugCornerIndicator(child: content);
+          }
           return Stack(
             key: const ValueKey('stack_cupertino'),
             children: [
-              child ?? const SizedBox(),
+              content,
               const GlobalStyleToggleButton(),
             ],
           );
@@ -59,14 +64,17 @@ class UnifiedApp extends StatelessWidget {
       return MaterialApp(
         key: const ValueKey('material_app'),
         title: title,
+        debugShowCheckedModeBanner: false,
         theme: materialConfig?['theme'] as ThemeData? ?? AppTheme.theme,
         builder: (context, child) {
-          // 在 MaterialApp 上添加全局悬浮按钮
-          // 使用 key 确保风格切换时完全重建，避免动画插值问题
+          Widget content = child ?? const SizedBox();
+          if (kDebugMode) {
+            content = DebugCornerIndicator(child: content);
+          }
           return Stack(
             key: const ValueKey('stack_material'),
             children: [
-              child ?? const SizedBox(),
+              content,
               const GlobalStyleToggleButton(),
             ],
           );
