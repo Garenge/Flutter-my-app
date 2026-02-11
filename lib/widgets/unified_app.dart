@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import '../services/app_style_manager.dart';
@@ -6,6 +7,21 @@ import '../theme/app_theme.dart';
 import '../theme/cupertino_theme.dart';
 import 'debug_corner_indicator.dart';
 import 'global_style_toggle_button.dart';
+
+/// 让桌面端（mouse/trackpad）也支持拖拽滚动/翻页（例如 TabBarView/PageView）
+class AppScrollBehavior extends MaterialScrollBehavior {
+  const AppScrollBehavior();
+
+  @override
+  Set<PointerDeviceKind> get dragDevices => const {
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+        PointerDeviceKind.trackpad,
+        PointerDeviceKind.stylus,
+        PointerDeviceKind.invertedStylus,
+        PointerDeviceKind.unknown,
+      };
+}
 
 /// 统一的 App 组件
 /// 根据当前风格自动选择 MaterialApp 或 CupertinoApp
@@ -39,6 +55,7 @@ class UnifiedApp extends StatelessWidget {
         key: const ValueKey('cupertino_app'),
         title: title,
         debugShowCheckedModeBanner: false,
+        scrollBehavior: const AppScrollBehavior(),
         theme: cupertinoConfig?['theme'] as CupertinoThemeData? ??
             CupertinoAppTheme.theme,
         builder: (context, child) {
@@ -65,6 +82,7 @@ class UnifiedApp extends StatelessWidget {
         key: const ValueKey('material_app'),
         title: title,
         debugShowCheckedModeBanner: false,
+        scrollBehavior: const AppScrollBehavior(),
         theme: materialConfig?['theme'] as ThemeData? ?? AppTheme.theme,
         builder: (context, child) {
           Widget content = child ?? const SizedBox();
