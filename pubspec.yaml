@@ -36,6 +36,9 @@ dependencies:
   cupertino_icons: ^1.0.2
   # 本地存储（简单键值对）
   shared_preferences: ^2.2.2
+  
+  # 网络请求
+  http: ^1.1.0
 
   # Toast 与 全局 Loading
   flutter_easyloading: ^3.0.5
