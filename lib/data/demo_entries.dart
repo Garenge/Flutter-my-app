@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:my_app/models/tool_item.dart';
 import 'package:my_app/services/app_style_manager.dart';
 import 'package:my_app/widgets/unified_dialogs.dart';
@@ -15,8 +16,8 @@ import 'package:my_app/pages/Demo/positioned_selector_demo_page.dart';
 
 /// 统一跳转：根据当前 UI 风格选择 Material / Cupertino 路由
 void _navigateToPage(BuildContext context, Widget page) {
-  final currentStyle = AppStyleManager.maybeOf(context)?.currentStyle ??
-      AppDesignStyle.material;
+  final currentStyle =
+      AppStyleManager.maybeOf(context)?.currentStyle ?? AppDesignStyle.material;
   if (currentStyle == AppDesignStyle.cupertino) {
     Navigator.of(context).push(
       CupertinoPageRoute(builder: (context) => page),
@@ -71,6 +72,12 @@ List<ToolItem> getRootDemoItems(BuildContext context) {
       icon: Icons.lightbulb_outline,
       children: _knowledgeItems(context),
     ),
+    ToolItem(
+      title: '待办事项',
+      description: '计划中的示例：下拉刷新列表、模型解析、骨架屏等',
+      icon: Icons.pending_actions,
+      children: _todoItems(context),
+    ),
   ];
 }
 
@@ -105,6 +112,45 @@ List<ToolItem> _componentItems(BuildContext context) {
       description: '在点击位置弹出选项框，宽100高min(40×项数,120)，点击空白关闭',
       icon: Icons.touch_app,
       onTap: () => _navigateToPage(context, const PositionedSelectorDemoPage()),
+    ),
+  ];
+}
+
+List<ToolItem> _todoItems(BuildContext context) {
+  return [
+    ToolItem(
+      title: '下拉刷新 + 上拉加载列表示例（TODO）',
+      description: '使用 pull_to_refresh_flutter3 实现列表的下拉刷新与上拉加载更多，完成最近两个任务后再开发',
+      icon: Icons.refresh,
+      onTap: () {
+        EasyLoading.showToast(
+          '下拉刷新 + 上拉加载列表示例：待实现',
+          toastPosition: EasyLoadingToastPosition.center,
+        );
+      },
+    ),
+    ToolItem(
+      title: 'JSON 模型解析演示（TODO）',
+      description:
+          '编写 1–2 个模型，使用 json_serializable + build_runner 生成 fromJson/toJson 全流程演示',
+      icon: Icons.data_object,
+      onTap: () {
+        EasyLoading.showToast(
+          'JSON 模型解析演示：待实现',
+          toastPosition: EasyLoadingToastPosition.center,
+        );
+      },
+    ),
+    ToolItem(
+      title: '骨架屏 + 网络图片列表示例（TODO）',
+      description: '使用 shimmer + cached_network_image 做一个带骨架屏占位和网络图片缓存的列表 demo',
+      icon: Icons.image,
+      onTap: () {
+        EasyLoading.showToast(
+          '骨架屏 + 网络图片列表示例：待实现',
+          toastPosition: EasyLoadingToastPosition.center,
+        );
+      },
     ),
   ];
 }

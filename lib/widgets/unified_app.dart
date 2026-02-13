@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import '../services/app_style_manager.dart';
 import '../theme/app_theme.dart';
 import '../theme/cupertino_theme.dart';
@@ -58,19 +59,21 @@ class UnifiedApp extends StatelessWidget {
         scrollBehavior: const AppScrollBehavior(),
         theme: cupertinoConfig?['theme'] as CupertinoThemeData? ??
             CupertinoAppTheme.theme,
-        builder: (context, child) {
-          Widget content = child ?? const SizedBox();
-          if (kDebugMode) {
-            content = DebugCornerIndicator(child: content);
-          }
-          return Stack(
-            key: const ValueKey('stack_cupertino'),
-            children: [
-              content,
-              const GlobalStyleToggleButton(),
-            ],
-          );
-        },
+        builder: EasyLoading.init(
+          builder: (context, child) {
+            Widget content = child ?? const SizedBox();
+            if (kDebugMode) {
+              content = DebugCornerIndicator(child: content);
+            }
+            return Stack(
+              key: const ValueKey('stack_cupertino'),
+              children: [
+                content,
+                const GlobalStyleToggleButton(),
+              ],
+            );
+          },
+        ),
         home: home,
         // 支持其他 CupertinoApp 的配置
         routes: cupertinoConfig?['routes'] as Map<String, WidgetBuilder>? ??
@@ -84,19 +87,21 @@ class UnifiedApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         scrollBehavior: const AppScrollBehavior(),
         theme: materialConfig?['theme'] as ThemeData? ?? AppTheme.theme,
-        builder: (context, child) {
-          Widget content = child ?? const SizedBox();
-          if (kDebugMode) {
-            content = DebugCornerIndicator(child: content);
-          }
-          return Stack(
-            key: const ValueKey('stack_material'),
-            children: [
-              content,
-              const GlobalStyleToggleButton(),
-            ],
-          );
-        },
+        builder: EasyLoading.init(
+          builder: (context, child) {
+            Widget content = child ?? const SizedBox();
+            if (kDebugMode) {
+              content = DebugCornerIndicator(child: content);
+            }
+            return Stack(
+              key: const ValueKey('stack_material'),
+              children: [
+                content,
+                const GlobalStyleToggleButton(),
+              ],
+            );
+          },
+        ),
         home: home,
         // 支持其他 MaterialApp 的配置
         routes: materialConfig?['routes'] as Map<String, WidgetBuilder>? ??
