@@ -24,7 +24,7 @@ class DemoListPage extends MyBasePage {
   Color get appBarBackgroundColor => isRoot ? Colors.red : Colors.blue;
 
   @override
-  Color? get pageBackgroundColor => Colors.grey[100];
+  Color? get pageBackgroundColor => const Color(0xFFF9F9F9);
 
   @override
   bool get automaticallyImplyLeading => !isRoot;
@@ -60,30 +60,43 @@ class DemoListPage extends MyBasePage {
         AppDesignStyle.material;
 
     if (currentStyle == AppDesignStyle.material) {
-      return Card(
-        margin: const EdgeInsets.only(bottom: 12),
-        elevation: 2,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+      return Container(
+        margin: const EdgeInsets.only(bottom: 8),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
         ),
         child: ListTile(
-          leading: Icon(tool.icon, size: 32, color: Colors.blue),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          leading: Icon(tool.icon, size: 28, color: Colors.blue),
           title: Text(
             tool.title,
             style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
             ),
           ),
           subtitle: Text(
             tool.description,
             style: TextStyle(
-              fontSize: 14,
+              fontSize: 13,
               color: Colors.grey[600],
+              height: 1.4,
             ),
           ),
-          trailing: const Icon(Icons.chevron_right),
+          trailing: const Icon(Icons.chevron_right, size: 20, color: Colors.grey),
           onTap: () => _onToolItemTap(context, tool),
+          tileColor: Colors.transparent,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
         ),
       );
     } else {
