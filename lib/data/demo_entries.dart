@@ -14,6 +14,7 @@ import 'package:my_app/pages/Form/my_textField_page.dart';
 import 'package:my_app/pages/Form/my_register_form_page.dart';
 import 'package:my_app/pages/Demo/positioned_selector_demo_page.dart';
 import 'package:my_app/pages/Demo/button_icon_text_tutorial_page.dart';
+import 'package:my_app/pages/svg_demo_page.dart';
 import 'package:my_app/pages/Network/network_list_page.dart';
 
 /// 统一跳转：根据当前 UI 风格选择 Material / Cupertino 路由
@@ -117,10 +118,10 @@ List<ToolItem> _componentItems(BuildContext context) {
     ),
     ToolItem(
       title: '按钮图标与文字',
-      description: '对比 iOS UIButton 的复杂 inset，演示在 Flutter 中如何用 Row/Column 轻松实现「文左图右」「图左文右」等布局',
+      description:
+          '对比 iOS UIButton 的复杂 inset，演示在 Flutter 中如何用 Row/Column 轻松实现「文左图右」「图左文右」等布局',
       icon: Icons.smart_button,
-      onTap: () =>
-          _navigateToPage(context, const ButtonIconTextTutorialPage()),
+      onTap: () => _navigateToPage(context, const ButtonIconTextTutorialPage()),
     ),
   ];
 }
@@ -206,6 +207,12 @@ List<ToolItem> _knowledgeItems(BuildContext context) {
       description: 'HTTP 请求示例：GET、POST、FutureBuilder、错误处理',
       icon: Icons.cloud_download,
       onTap: () => _navigateToPage(context, const NetworkListPage()),
+    ),
+    ToolItem(
+      title: 'SVG Hit Test',
+      description: '点击 SVG 纯色块，返回命中的路径区域和源颜色值',
+      icon: Icons.image_search,
+      onTap: () => _navigateToPage(context, const SvgDemoPage()),
     ),
   ];
 }
