@@ -14,8 +14,9 @@ import 'package:my_app/pages/Form/my_textField_page.dart';
 import 'package:my_app/pages/Form/my_register_form_page.dart';
 import 'package:my_app/pages/Demo/positioned_selector_demo_page.dart';
 import 'package:my_app/pages/Demo/button_icon_text_tutorial_page.dart';
-import 'package:my_app/pages/svg_demo_page.dart';
+import 'package:my_app/pages/Demo/svg_demo_page.dart';
 import 'package:my_app/pages/Network/network_list_page.dart';
+import 'package:my_app/pages/Refresh/refresh_list_demo_page.dart';
 
 /// 统一跳转：根据当前 UI 风格选择 Material / Cupertino 路由
 void _navigateToPage(BuildContext context, Widget page) {
@@ -123,22 +124,17 @@ List<ToolItem> _componentItems(BuildContext context) {
       icon: Icons.smart_button,
       onTap: () => _navigateToPage(context, const ButtonIconTextTutorialPage()),
     ),
+    ToolItem(
+      title: '下拉刷新',
+      description: '使用 pull_to_refresh_flutter3 演示下拉刷新与上拉加载更多的完整交互',
+      icon: Icons.refresh,
+      onTap: () => _navigateToPage(context, const RefreshListDemoPage()),
+    ),
   ];
 }
 
 List<ToolItem> _todoItems(BuildContext context) {
   return [
-    ToolItem(
-      title: '下拉刷新 + 上拉加载列表示例（TODO）',
-      description: '使用 pull_to_refresh_flutter3 实现列表的下拉刷新与上拉加载更多，完成最近两个任务后再开发',
-      icon: Icons.refresh,
-      onTap: () {
-        EasyLoading.showToast(
-          '下拉刷新 + 上拉加载列表示例：待实现',
-          toastPosition: EasyLoadingToastPosition.center,
-        );
-      },
-    ),
     ToolItem(
       title: 'JSON 模型解析演示（TODO）',
       description:
