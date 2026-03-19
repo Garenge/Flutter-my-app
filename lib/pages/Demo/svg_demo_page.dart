@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/base/my_base_page.dart';
+import 'package:my_app/widgets/svg_basic_usage_showcase.dart';
 import 'package:my_app/widgets/svg_color_hit_test_demo.dart';
 import 'package:my_app/widgets/svg_demo_section.dart';
 
@@ -23,6 +24,11 @@ class SvgDemoPage extends MyBasePage {
       padding: const EdgeInsets.all(16),
       children: const [
         _SvgDemoIntroCard(),
+        SvgDemoSection(
+          title: '基础用法',
+          description: '除了点击命中实验，这里也保留 SVG 在项目中的常见写法：资源展示、尺寸适配、字符串加载与统一染色。',
+          child: SvgBasicUsageShowcase(),
+        ),
         SvgDemoSection(
           title: '点击实验',
           description:
@@ -57,7 +63,7 @@ class _SvgDemoIntroCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
       ),
       child: const Text(
-        '这里用一个七巧板风格的测试 SVG 来验证“点击后拿到 SVG 自身这个点所属色块的原始颜色”这件事。',
+        '这个页面现在同时覆盖两类内容：前半部分是 SVG 的常见展示方式，后半部分是七巧板点击命中实验，用来验证如何拿到某个点击点对应的 SVG 色块信息。',
         style: TextStyle(
           fontSize: 15,
           height: 1.6,
